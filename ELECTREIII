@@ -1,0 +1,70 @@
+#Algoritmo RStudio® para aplicação do ELECTRE III
+# Aplicação do Método ELECTRE III na seleção de projetos de descomissionamento
+# de ativos de produção de petróleo offshore dos campos marlim e voador
+
+#instala e carrega pacote "Outrankingtools"
+install.packages("OutrankingTools")
+library(OutrankingTools)
+
+# Tabela 2 Matriz de avaliação das alternativas
+
+performanceMatrix <- cbind(
+  c(0,0,506,796,1231),
+  c(0,0,24120,37729,58569),
+  c(252509,252509,148029,90071,0),
+  c(820,820,523,322,322),
+  c(498,498,422,322,0),
+  c(1947,1947,463,353,0),
+  c(3390,4521,3511,3475,1775),
+  c(2.1,2.2,1.7,1.1,1),
+  c(8.3,11.4,8.6,8.5,3.8),
+  c(85,185,133,153,38),
+  c(2525,2525,1480,901,0),
+  c(200,180,143,110,89),
+  c(322,109,180,109,322))
+
+# Vetor de identificação as alternativas
+alternatives <- c("Alternativa 1","Alternativa 2","Alternativa 3",
+                  "Alternativa 4","Alternativa 5")
+
+# Vetor de nome dos critérios.
+criteria <- c( "g1","g2","g3","g4","g5","g6","g7","g8","g9","g10","g11","g12",
+               "g13")
+
+# Identificação da função objetivo de avaliação de cada critério, 
+#maximização ou minimização
+minmaxcriteria <- c("max","max","min","min","min","min","min","min",
+                    "min","min","min","min","min")
+
+# Vetor de definição da importância dos critérios. 
+#Pesos uniformes para o caso base.
+#Análise de sensibilidade SRF altera o peso do pior critério para 5.1 e o melhor 10.2
+criteriaWeights <- c(7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7,7.7)
+
+# Vetor de definição dos limiares de indiferença (q), de preferência (p) e de veto (v)
+alpha_q <- c(0,0,0,0,0,0,0,0,0,0,0,0,0)
+beta_q <- c(529.5,25176.78,108515.08,249.92,207.52,933.24,
+            986.64,0.55,2.73,57.93,1085.07,46.40,107.68)
+alpha_p <- c(0,0,0,0,0,0,0,0,0,0,0,0,0)
+beta_p <- c(1059.15,50353.56,-217030.15,499.85,415.04,1866.49,
+            1973.27,1.11,5.46,115.87,2170.14,92.81,215.35)
+alpha_v <- c(0,0,0,0,0,0,0,0,0,0,0,0,0)
+beta_v <- c(1588.72,75530.33,325545.23,749.77,622.56,2799.73,
+            2959.91,1.66,8.19,173.80,3255.21,139.21,323.03)
+
+# definição do modo de cálculo e destilação de critérios
+mode_def <- c("D","D","D","D","D","D","D","D","D","D","D","D","D")
+
+# Solução do ordenamento ELECTREIII
+Electre3_AlphaBetaThresholds(performanceMatrix,
+                             alternatives,
+                             criteria,
+                             minmaxcriteria,
+                             criteriaWeights,
+                             alpha_q,
+                             beta_q,
+                             alpha_p,
+                             beta_p,
+                             alpha_v,
+                             beta_v,
+                             mode_def)
